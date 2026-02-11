@@ -9,5 +9,7 @@ export default defineConfig({
       interval: 100,        // check for changes every 100ms
      
     },
+    host: "0.0.0.0",
+    port:5174
   },
 });

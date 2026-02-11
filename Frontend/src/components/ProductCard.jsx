@@ -25,7 +25,7 @@ const {cart , setCart} = useContext(CartContext)
 
 const handelAddToCart = (p)=>{
 
-let foundItem = cart.find((i)=>i.id==p.id)
+let foundItem = cart.find((i)=>i._id==p._id)
 
 if(!foundItem){
   p.quantity=1
@@ -41,20 +41,19 @@ if(!foundItem){
 
   return (
     <div>
-       <div className="card my-3">
+  <div className="card my-3">
   <div className='card-img'>
     <img src={props.product.image} className="card-img-top" alt="..."/>
   </div>
   <div className="card-body text-center">
-    <button href="#" className="btn btn-info w-100 mb-3" disabled={cart.find((i)=>i.id==props.product.id)?true:false} onClick={()=>handelAddToCart(props.product)}>{cart.find((i)=>i.id==props.product.id)?'Added':'Add to Cart'}</button>
-   <Link to={`/products/${props.product.slug}`} style={{textDecoration:"none", color:"black"}}>
+    <button href="#" className="btn btn-info w-100 mb-3" disabled={cart.find((i)=>i.id==props.product._id)?true:false} onClick={()=>handelAddToCart(props.product)}>{cart.find((i)=>i._id==props.product._id)?'Added':'Add to Cart'}</button>
+<Link to={`/products/${props.product.slug}`} style={{textDecoration:"none", color:"black"}}>
     <h5 className="card-title">{props.product.title}</h5>
-   </Link>
+</Link>
     <p className="card-text mb-1">{props.product.price}-RS</p>
-         <Rating readonly={true} allowFraction={true} transition={true} initialValue={props.product.rating.rate} />({props.product.rating.count})
-     
-    </div>
-   </div>
+      <Rating readonly={true} allowFraction={true} transition={true} initialValue={props.product.rating.rate} />({props.product.rating.count})
+        </div>
+      </div>
     </div>
   )
 }

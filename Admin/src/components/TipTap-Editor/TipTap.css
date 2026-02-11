@@ -1,0 +1,43 @@
+.richtext-editor-wrapper {
+    margin-bottom: 1rem;
+}
+
+.editor-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    padding: 0.4rem;
+}
+
+.editor-toolbar button {
+    padding: 0.25rem 0.5rem;
+    border: 1px solid #adb5bd;
+    border-radius: 4px;
+    background-color: #ffffff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.editor-toolbar button:hover {
+    background-color: #e9ecef;
+}
+
+.active-btn {
+    background-color: #0d6efd;
+    color: white;
+    border-color: #0a58ca;
+}
+
+.editor-content {
+    border: 1px solid #ced4da;
+    min-height: 180px;
+    border-radius: 5px;
+    padding: 0.5rem;
+    background-color: #ffffff;
+}

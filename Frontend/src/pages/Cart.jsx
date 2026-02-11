@@ -1,114 +1,111 @@
 import React from 'react'
-import { CartContext } from '../App.jsx'
-import { useContext } from 'react'
+import Breadcrumb from "../components/Detail-page-component/Breadcrum.jsx"
+import { useCart } from '../Custom-context/CartProvider.jsx'
+import CartSummary from '../components/CartSummary.jsx';
 
 const Cart = () => {
-  const { cart, setCart } = useContext(CartContext)
+  
+  const { cartState, IncreamentCart, DecrementCart, RemoveFromCart, ClearCart } = useCart();
 
-  const handelDelete = (id) => {
-    let updatedCart = cart.filter(c => c.id !== id)
-    setCart(updatedCart)
-  }   //handelremove function
 
-  const handelClearCart = () => {
-    setCart([])
-  }
-
-  const handelChange = (e, item) => {
-    const value = parseInt(e.target.value) || 1
-
-    const updated = cart.map(c => {
-      if (c.id === item.id) {
-        return { ...c, quantity: value }
-      }
-      return c
+  console.log("add to cart state", cartState);
+  
+  // calculate total cart amount
+const totalCartAmount = () => {
+    let totalCartAmount = 0;
+    cartState.forEach((item) => {
+      totalCartAmount += item?.price * item?.quantity;
     })
-    setCart(updated)
+    return totalCartAmount;
   }
-
-  const handelQtyIncrement = (item) => {
-    const updated = cart.map(c => {
-      if (c.id === item.id) {
-        return { ...c, quantity: c.quantity + 1 }
-      }
-      return c
-    })
-    setCart(updated)
-  }
-
-  const handelQtyDecrement = (item) => {
-    const updated = cart.map(c => {
-      if (c.id === item.id) {
-        const newQty = c.quantity - 1
-        return { ...c, quantity: newQty > 1 ? newQty : 1 }
-      }
-      return c
-    })
-    setCart(updated)
-  }
-
-  // Calculate grand total
-  const grandTotal = cart.reduce((acc, item) => {
-    return acc + item.price * item.quantity
-  }, 0)
-
   return (
-    <div className='container'>
-      <table className="table">
-        <thead style={{ background: 'black', color: 'white' }}>
-          <tr>
-            <th scope="col" className='tabel-heading'>image</th>
-            <th scope="col" className='tabel-heading'>Title</th>
-            <th scope="col" className='tabel-heading'>Price</th>
-            <th scope="col" className='tabel-heading'>Quantity</th>
-            <th scope="col" className='tabel-heading'>Total</th>
-            <th scope="col" className='tabel-heading'>Delete</th>
-          </tr>
-        </thead>
+    <div>
+      <Breadcrumb />
+      <div className="container-fluid">
+        <div className="row px-xl-5">
+          {/* Cart Table */}
+          <div className="col-lg-8 table-responsive mb-5">
+            <table className="table table-light table-borderless table-hover text-center mb-0">
+              <thead className="table-dark">
+                <tr>
+                  <th>Products</th>
+                  <th>Price</th>
+                  <th>Quantity</th>
+                  <th>Total</th>
+                  <th>Remove</th>
+                </tr>
+              </thead>
 
-        <tbody>
-          {cart.map(item => (
-            <tr key={item.id} style={{ marginBlock: '1rem', border: '1px solid black', padding: '20px 40px' }}>
-              <td><img width={50} src={item.image} alt="" /></td>
-              <td>{item.title}</td>
-              <td>{item.price}</td>
+              <tbody className="align-middle">
+                {cartState?.length > 0 &&
+                  cartState.map((item) => (
+                    <tr key={item._id}>
+                      <td className="align-middle">
+                        <img
+                          src={item?.image?.secure_url}
+                          alt="product"
+                          style={{ width: "50px" }}
+                          className="me-2"
+                        />
+                        {item.title}
+                      </td>
+                      <td className="align-middle">{item.price}/-Pkr</td>
+                      <td className="align-middle">
+                        <div
+                          className="input-group quantity mx-auto"
+                          style={{ width: "100px" }}
+                        >
+                          <button
+                            className="btn btn-sm btn-primary"
+                            onClick={() => DecrementCart(item)}
+                          >
+                            <i className="fa fa-minus"></i>
+                          </button>
+                          <input
+                            type="text"
+                            className="form-control form-control-sm  border-0 text-center form-custom"
+                            value={item?.quantity}
+                            readOnly
+                          />
+                          <button
+                            className="btn btn-sm btn-primary"
+                            onClick={() => IncreamentCart(item.productId)}
+                          >
+                            <i className="fa fa-plus"></i>
+                          </button>
+                        </div>
+                      </td>
+                      <td className="align-middle">
+                        {item?.price * item?.quantity}/-PKR
+                      </td>
+                      <td className="align-middle">
+                        <button
+                          className="btn btn-sm btn-danger"
+                          onClick={() => RemoveFromCart(item.productId)}
+                        >
+                          <i className="fa fa-times"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
 
-              <td>
-                <div className='d-flex'>
-                  <button className='btn btn-dark' onClick={() => handelQtyDecrement(item)}>-</button>
+            <button
+              className="btn btn-lg btn-danger my-1"
+              onClick={() => ClearCart()}
+              disabled={cartState.length == 0 ? true : false}
+            >
+              Clear Cart <i className="fa fa-times"></i>
+            </button>
+          </div>
 
-                  <input
-                    type="number"
-                    className='form-control'
-                    value={item.quantity}
-                    onChange={(e) => handelChange(e, item)}
-                    style={{ width: '50px' }}
-                  />
-
-                  <button className='btn btn-dark' onClick={() => handelQtyIncrement(item)}>+</button>
-                </div>
-              </td>
-
-              <td>{item.price * item.quantity}</td>
-
-              <td>
-                <button
-                  className='btn btn-danger'
-                  onClick={() => handelDelete(item.id)} >
-                  <i className="bi bi-trash-fill"></i>
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      {/* Grand Total */}
-      <h3 className='mt-3'>Grand Total: {Math.ceil(grandTotal)}/-Rs</h3>
-
-      <button className='btn btn-danger mt-2' onClick={handelClearCart}>Clear Cart</button>
+          {/* Cart Summary */}
+          <CartSummary totalCartAmount={totalCartAmount} />
+        </div>
+      </div>
     </div>
-  )
+  );
 }
 
-export default Cart
+export default Cart;

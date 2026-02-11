@@ -1,6 +1,5 @@
 import React from 'react'
-import { useForm } from 'react-hook-form'
-// eslint-disable-next-line no-unused-vars
+import { useForm } from 'react-hook-form' 
 import * as z from "zod"; 
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -54,7 +53,7 @@ const {register, handleSubmit, watch,  formState: { errors, touchedFields }} =us
                
 
             <div className="col-12">
-                <button type="submit" className="btn btn-success">Send</button>
+                <button type="submit" className="btn bg-custom">Send</button>
             </div>
             </form>
     </div>

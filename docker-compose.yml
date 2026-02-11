@@ -1,0 +1,72 @@
+services:
+ 
+
+
+  admin:
+    build:
+      context: ./Admin
+      dockerfile: Dockerfile
+    container_name: admin_app
+    ports:
+      - "3000:5173"
+    env_file:
+      - ./Admin/.env
+    depends_on:
+      - server
+    restart: unless-stopped
+
+
+
+
+  client:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    container_name: client_app
+    ports:
+      - "4000:5174"
+    env_file:
+      - ./Frontend/.env
+    depends_on:
+      - server
+    restart: unless-stopped
+
+
+
+  server:
+      build:
+        context: ./Backend
+        dockerfile: Dockerfile
+      container_name: server_app
+      ports:
+        - "7000:7000"
+      env_file:
+        - ./Backend/.env
+      restart: unless-stopped
+      depends_on: 
+       - mongodb
+
+   
+
+
+
+
+  mongodb:
+      image: mongo:6
+      container_name: mongo_db
+      ports:
+        - "27017:27017"
+      environment:
+        MONGO_INITDB_ROOT_USERNAME: admin
+        MONGO_INITDB_ROOT_PASSWORD: admin123
+        MONGO_INITDB_DATABASE: e-store
+      volumes:
+        - mongo_data:/data/db
+      restart: always
+
+
+
+volumes:
+    mongo_data:
+
+    
