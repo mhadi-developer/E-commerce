@@ -52,7 +52,7 @@ export const SignInUser = async (req, res) => {
     console.log(data);
 
     // Check if user exists
-    const registerUser = await UserModal.findOne({ email: email });
+    const registerUser = await UserModal.findOne({ email });
 
     if (!registerUser) {
       return res.status(404).json({
@@ -60,9 +60,10 @@ export const SignInUser = async (req, res) => {
         message: "user not found",
       });
     }
-
+    console.log("********** user found", registerUser);
     // Compare entered password with stored hashed password
     const isMatched = await bcrypt.compare(password, registerUser?.password);
+
 
     if (!isMatched) {
       return res.status(401).json({

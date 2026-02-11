@@ -48,31 +48,28 @@ app.get("/", (req, res) => {
 });
 
 // ───── ROUTES ─────
-app.use("/api", productRoutes);
-app.use("/api", categoryRoutes);
-app.use("/api", userRoutes);
-app.use("/api", paymentRoutes);
-app.use("/api", orderRoutes);
-app.use("/api", cartRoutes);
+app.use( "/api",productRoutes);
+app.use( "/api",categoryRoutes);
+app.use( "/api",userRoutes);
+app.use( "/api",paymentRoutes);
+app.use( "/api",orderRoutes);
+app.use( "/api",cartRoutes);
 
-// ───── DB CONNECTION FOR SERVERLESS ─────
-let isConnected = false;
-
-app.use(async (req, res, next) => {
-  if (!isConnected) {
-    await connectDB();
-    isConnected = true;
-  }
-  next();
-});
-
-// ───── LOCAL SERVER START ─────
+// ───── START SERVER AFTER DB CONNECTION ─────
 const PORT = process.env.PORT || 5000;
 
-if (process.env.NODE_ENV !== "production") {
-  app.listen(PORT, () => {
-    console.log(`Server running on ${PORT}`);
-  });
-}
+const startServer = async () => {
+  try {
+    await connectDB(); // Connect to MongoDB
+    console.log("MongoDB connected successfully.");
 
-export default app;
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error(" Failed to connect to MongoDB:", error);
+    process.exit(1); // Exit server if DB connection fails
+  }
+};
+
+startServer();

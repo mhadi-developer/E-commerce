@@ -22,6 +22,8 @@ export default function SignInForm() {
 
   if (loggedInUserLoading) return <p>loading.....</p>
   if(loggedInUserData && loggedInUserData?.fullName) return <Navigate to={'/'} />  // checking is user already logged in or not.
+  
+  const location = useNavigate();
 
 
 
@@ -42,11 +44,9 @@ export default function SignInForm() {
 
   
     
-    const { postData, data, loading, error } = usePost(`/users/signin`
-      
-    `);
+    const { postData, data, loading, error } = usePost(`${import.meta.env.VITE_API_URL}/users/signin`,);
     
-    console.log(data);
+    console.log("response after log in request",data);
     console.log(error);
     
     
@@ -55,7 +55,7 @@ export default function SignInForm() {
   const onSubmit = async (data) => {
     console.log("Login Data:", data);
     await postData(data);
-    window.location.href = '/'; // redirecting to homepage
+    location('/'); // redirecting to homepage
     
   };
 
@@ -73,9 +73,7 @@ export default function SignInForm() {
                   <label className="form-label">Email</label>
                   <input
                     type="email"
-                    className={`form-control ${
-                      errors.email ? "is-invalid" : ""
-                    }`}
+                    className={`form-control ${errors.email ? "is-invalid" : ""}`}
                     {...register("email")}
                   />
                   <div className="invalid-feedback">

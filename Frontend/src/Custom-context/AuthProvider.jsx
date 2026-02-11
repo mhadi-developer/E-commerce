@@ -5,7 +5,7 @@ export const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
   const { data, error, loading } = useFetch(
-    `${import.meta.env.VITE_URL_API}/users/loggedIn-user`
+    `${import.meta.env.VITE_API_URL}/users/loggedIn-user`,
   );
 
   const [loggedInUserData, setLoggedInUserData] = useState(null);
@@ -16,7 +16,7 @@ const AuthProvider = ({ children }) => {
 
   const LogoutUser = async () => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_URL_API}/users/logout`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/users/logout`, {
         method: "POST",
         credentials: "include",
       });

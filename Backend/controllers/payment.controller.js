@@ -122,11 +122,6 @@ export const confirmOrder = async (req, res, next) => {
   
     console.log("new order --->",orderSavedDB);
     
-   
-
-    const socket = req.app.get('socket');  // recieing io/socket global scope var
-
-   socket.emit("new-order", orderSavedDB);
 
 
 
