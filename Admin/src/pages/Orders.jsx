@@ -25,36 +25,58 @@ data?.orders?.map((order, index) => {
       <div class="container-fluid pt-4 px-4">
         <div class="row g-4">
           <div class="col-12">
-            <div class="bg-secondary rounded h-100 p-4">
+            <div class="bg-secondary rounded h-100 p-4 ">
               <h6 class="mb-4 text-primary">Orders Record</h6>
               <div class="table-responsive">
                 <table class="table">
                   <thead>
                     <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Customer Name</th>
-                      <th scope="col">Email</th>
-                      <th Scope="col">Amount Status</th>
-                      <th scope="col">Order Status</th>
-                      <th scope="col">Order Created at</th>
-                      <th scope="col">Total Amount</th>
+                      <th scope="col" className="text-success">
+                        #
+                      </th>
+                      <th scope="col" className="text-success">
+                        Customer Name
+                      </th>
+                      <th scope="col" className="text-success">
+                        Email
+                      </th>
+                      <th Scope="col" className="text-success">
+                        Amount Status
+                      </th>
+                      <th scope="col" className="text-success">
+                        Order Status
+                      </th>
+                      <th scope="col" className="text-success">
+                        Order Created at
+                      </th>
+                      <th scope="col" className="text-success">
+                        Total Amount
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {data?.orders &&
-                      data?.orders?.map((order , index) => (
+                      data?.orders?.map((order, index) => (
                         <tr>
-                          <th scope="row">{index +1 }</th>
-                          <td>{order?.customer?.name}</td>
-                          <td>{order?.customer?.email}</td>
-                          <td>{order?.paymentStatus}</td>
-                          <td>{order?.orderStatus}</td>
-                          <td>
+                          <th scope="row" className="text-primary">
+                            {index + 1}
+                          </th>
+                          <td className="text-white">
+                            {order?.customer?.name}
+                          </td>
+                          <td className="text-white">
+                            {order?.customer?.email}
+                          </td>
+                          <td className="text-white">{order?.paymentStatus}</td>
+                          <td className="text-white">{order?.orderStatus}</td>
+                          <td className="text-white">
                             {moment(order?.createdAt)
                               .local()
                               .format("MMMM Do YYYY, h:mm A")}
                           </td>
-                          <td>{order?.totalAmount}-/PKR</td>
+                          <td className="text-white">
+                            {order?.totalAmount}-/PKR
+                          </td>
                         </tr>
                       ))}
                   </tbody>

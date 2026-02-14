@@ -102,7 +102,7 @@ const ConfirmedOrderDetails = () => {
               <div className="row">
                 <div className="col-6 fw-bold">Total Amount</div>
                 <div className="col-6 text-end fw-bold">
-                  {(order?.totalAmount / 100) * 280} -PKR
+                  {(order?.totalAmount / 100).toFixed(2) * 280} -PKR
                 </div>
               </div>
             </div>
@@ -133,7 +133,7 @@ const ConfirmedOrderDetails = () => {
 
           {/* Actions */}
           <div className="text-center">
-            <a href="/orders" className="btn btn-outline-secondary me-2">
+            <a href="/user/all/orders" className="btn btn-outline-secondary me-2">
               View All Orders
             </a>
             <a href="/" className="btn btn-primary">

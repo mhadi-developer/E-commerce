@@ -2,6 +2,7 @@ import React from 'react'
 import  Overview  from './subContent-Profile/Overview.jsx';
 import { useAuth } from '../../Custom-context/AuthProvider.jsx';
 import { Personalinformation }  from './subContent-Profile/Personalinformation.jsx';
+import UserOrdersView from './subContent-Profile/UserOrdersView.jsx';
 
 const RightContent = ({ activeTab }) => {
     const { loggedInUserData } = useAuth();
@@ -26,7 +27,12 @@ const RightContent = ({ activeTab }) => {
           {activeTab === "addresses" && (
             <h1 className="fw-semibold">Addresses</h1>
           )}
-          {activeTab === "orders" && <h1 className="fw-semibold">Orders</h1>}
+          {activeTab === "orders" && (
+            <div>
+              <h1 className="fw-semibold">Orders</h1>
+              <UserOrdersView />
+            </div>
+          )}
           {activeTab === "payments" && (
             <h1 className="fw-semibold">Payments</h1>
           )}

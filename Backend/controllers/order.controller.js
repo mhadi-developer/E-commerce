@@ -36,16 +36,19 @@ export const getAllOrders = async (req, res) => {
 export const getOrderById = async (req, res) => {
   try {
     const { id } = req.params;
+    console.log("id for find order", id);
+    
 
-    const orderById = await orderModal.findById(id);
+    const orders = await orderModal.find({user: id});
 
     console.log(
       "**************--Order Find By ID (DB)-- ***********",
-      orderById,
+      orders,
     );
 
     res.status(200).json({
-      orderById,
+      message: "order fetched successfully",
+      orders,
     });
   } catch (error) {
     console.log(error);

@@ -23,6 +23,7 @@ import Checkout from './pages/Checkout.jsx';
 import PaymentSuccess from './pages/PaymentSuccsess.jsx';
 import PaymentCancellation from './pages/PaymentCancel.jsx';
 import ConfirmedOrderDetails from './pages/ConfirmOrderDetails.jsx';
+import UserOrdersView from './components/Profile/subContent-Profile/UserOrdersView.jsx';
 import Shope from './pages/Shope.jsx';
 
 
@@ -98,7 +99,7 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/payment/success" element={<PaymentSuccess />} />
             <Route path="/payment/cancel" element={<PaymentCancellation />} />
-            <Route path="/shop/:cat_id?" element={<Shope/>} />
+            <Route path="/shop/:cat_id?" element={<Shope />} />
 
             <Route
               path="/order/confirm/detail"
@@ -106,6 +107,8 @@ function App() {
             />
 
             <Route path="/product/detail/:slug" element={<Details />} />
+            <Route path="/user/all/orders" element={<UserOrdersView />} />
+
             <Route path="/signup" element={<SignupForm />} />
             <Route path="/signin" element={<SignInForm />} />
             <Route
