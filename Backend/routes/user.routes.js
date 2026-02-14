@@ -6,6 +6,7 @@ import {
   getLoggedInUser,
   LogoutUser,
   updateUser,
+  userPasswordUpdation,
 } from "../controllers/user.controller.js";
 import { isAuthenticated } from "../Middleware/auth.middleware.js";
 
@@ -16,6 +17,8 @@ router.route("/users/signup").post(signUpUser);
 router.route("/users/signin").post(SignInUser);
 router.route("/users/update").put(isAuthenticated, updateUser); // updating user.....
 router.route("/users/loggedIn-user").get(isAuthenticated, getLoggedInUser);
+router.route("/users/change/password").put(userPasswordUpdation);
+
  // protected by isAuthenticated middleware
 router.route("/users/logout").post(LogoutUser); // logout for logged in user 
 

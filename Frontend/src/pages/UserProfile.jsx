@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import RightContent from "../components/Profile/RightContent.jsx";
 
 const UserProfile = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -88,36 +89,7 @@ const UserProfile = () => {
         </div>
 
         {/* RIGHT CONTENT AREA */}
-        <div className="col-lg-9">
-          <div className="card border-0 shadow-sm">
-            <div className="card-body p-4">
-              {activeTab === "overview" && (
-                <h1 className="fw-semibold">Overview</h1>
-              )}
-              {activeTab === "personal" && (
-                <h1 className="fw-semibold">Personal Information</h1>
-              )}
-              {activeTab === "addresses" && (
-                <h1 className="fw-semibold">Addresses</h1>
-              )}
-              {activeTab === "orders" && (
-                <h1 className="fw-semibold">Orders</h1>
-              )}
-              {activeTab === "payments" && (
-                <h1 className="fw-semibold">Payments</h1>
-              )}
-              {activeTab === "security" && (
-                <h1 className="fw-semibold">Security & Login</h1>
-              )}
-              {activeTab === "preferences" && (
-                <h1 className="fw-semibold">Preferences</h1>
-              )}
-              {activeTab === "messages" && (
-                <h1 className="fw-semibold">Messages</h1>
-              )}
-            </div>
-          </div>
-        </div>
+        <RightContent activeTab={activeTab} />
       </div>
     </div>
   );

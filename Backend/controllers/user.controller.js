@@ -167,6 +167,58 @@ export const updateUser = async (req, res) => {
     res.state(404).json({ message: error });
   }
 };
+/*------------------------------------------------------------------------------------------------------*/
+
+export const userPasswordUpdation = async (req, res) => {
+  try {
+    const { currentPassword, newPassword, userId } = req.body;
+
+    console.log({
+      currentPassword,
+      newPassword,
+      userId
+    });
+    
+
+   
+    
+    console.log("user id ", userId);
+    
+
+    const user = await UserModal.findById(userId);
+
+  
+
+    const isMatched = await bcrypt.compare(currentPassword, user.password);
+
+    if (isMatched ) {
+      user.password = await bcrypt.hash(newPassword, 10);
+      await user.save();
+      return res.status(200).json({
+        message: "password updated successfully",
+        success: true
+      })
+    }
+
+    if (!isMatched) {
+      return res.status(401).json({
+        message: " current password is incorrect",
+        success : false
+      })
+    }
+
+
+    
+    
+  } catch (error) {
+    res.status(500).json({
+      message: error.message  || " server error",
+    });
+    console.log(error);
+    
+  }
+  
+}
 
 /**
  * ---------------------------------------------------------

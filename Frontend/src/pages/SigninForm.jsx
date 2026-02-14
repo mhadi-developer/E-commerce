@@ -23,8 +23,7 @@ export default function SignInForm() {
   if (loggedInUserLoading) return <p>loading.....</p>
   if(loggedInUserData && loggedInUserData?.fullName) return <Navigate to={'/'} />  // checking is user already logged in or not.
   
-  const location = useNavigate();
-
+ 
 
 
   const {
@@ -55,7 +54,7 @@ export default function SignInForm() {
   const onSubmit = async (data) => {
     console.log("Login Data:", data);
     await postData(data);
-    location('/'); // redirecting to homepage
+    window.location.href = '/'; // redirecting to homepage
     
   };
 
