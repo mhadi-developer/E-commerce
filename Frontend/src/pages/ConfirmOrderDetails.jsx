@@ -5,7 +5,7 @@ const ConfirmedOrderDetails = () => {
     const [order, setOrder] = useState(null);
     const [searchParams] = useSearchParams();
     
-    const order_id = searchParams.get("orderId");
+    const order_id = searchParams.get("orderId"); // order id from backend response after order confirmation
 
 
     console.log("*************Confirm order ID", order_id);
@@ -73,7 +73,7 @@ const ConfirmedOrderDetails = () => {
               <div className="row">
                 <div className="col-6 fw-bold">Order Owner</div>
                 <div className="col-6 text-end fw-bold">
-                 {order?.customer?.name}
+                  {order?.customer?.name}
                 </div>
               </div>
               <div className="row mb-2">
@@ -119,9 +119,25 @@ const ConfirmedOrderDetails = () => {
                   key={index}
                   className="list-group-item d-flex justify-content-between align-items-center"
                 >
-                  <div>
-                    <h6 className="mb-1">{item.name}</h6>
-                    <small className="text-muted">Qty: {item.quantity}</small>
+                  <div className="d-flex align-items-center">
+                    {/* Product Image */}
+                    {item.image && (
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="me-3"
+                        style={{
+                          width: "60px",
+                          height: "60px",
+                          objectFit: "cover",
+                          borderRadius: "5px",
+                        }}
+                      />
+                    )}
+                    <div>
+                      <h6 className="mb-1">{item.name}</h6>
+                      <small className="text-muted">Qty: {item.quantity}</small>
+                    </div>
                   </div>
                   <span className="fw-semibold">
                     {(item.unitAmount / 100) * 280 * item.quantity}/-PKR
@@ -133,7 +149,10 @@ const ConfirmedOrderDetails = () => {
 
           {/* Actions */}
           <div className="text-center">
-            <a href="/user/all/orders" className="btn btn-outline-secondary me-2">
+            <a
+              href="/user/all/orders"
+              className="btn btn-outline-secondary me-2"
+            >
               View All Orders
             </a>
             <a href="/" className="btn btn-primary">

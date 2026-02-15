@@ -19,31 +19,31 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 ========================================================= */
 export const stripePayment = async (req, res, next) => {
   try {
-    const { items } = req.body;
+    const { items , id } = req.body;
 
     console.log("frontend sended item to purchse******", items);
     console.info("Stripe payment initiated", { items });
 
     // Transform frontend items into Stripe line items
-    const lineItems = items.map((item) => {
-      return {
-        price_data: {
-          currency: "usd",
-          unit_amount: item.unitPrice,
-          product_data: {
-            name: item.title,
-          },
-        },
-        quantity: item.quantity,
-      };
-    });
+    const lineItems = items.map(item => ({
+  price_data: {
+    currency: 'usd',
+    unit_amount: item.unitPrice ,
+    product_data: {
+      name: item.title,
+      images: item.image ? [item.image] : [], // ✅ ARRAY OF STRINGS
+    },
+  },
+  quantity: item.quantity,
+}));
 
-    console.log("&&&&&&&&&&&&&&&&&&&& lineitems", lineItems);
-   console.log("Stripe line items prepared", { lineItems });
+    console.log("Stripe line items prepared", { lineItems });
+    console.log("stripe linitem image", lineItems[0].price_data.product_data.images);
+    
 
-    console.log("**************** user id", req?.user?.id);
+   
     console.info("Creating Stripe session for user", {
-      userId: req?.user?.id,
+      userId: id,
     });
 
     // Create Stripe checkout session
@@ -54,11 +54,14 @@ export const stripePayment = async (req, res, next) => {
       line_items: lineItems,
       mode: "payment",
       payment_method_types: ["card"],
-      client_reference_id: req?.user?.id,
+      client_reference_id:id,
     });
-
+     
+    console.log("lineItems to be created in stripe session", lineItems);
+    
     console.log("Stripe checkout session created", {
       sessionId: session.id,
+      session
     });
 
     res.status(200).json({ url: session.url });
@@ -91,8 +94,12 @@ export const confirmOrder = async (req, res, next) => {
 
     // 1️⃣ Retrieve Stripe session
     const session = await stripe.checkout.sessions.retrieve(sessionId, {
-      expand: ["line_items"],
+      expand: [
+        "line_items", // expands the line items list itself
+        "line_items.data.price.product", // expands each product object inside line items
+      ],
     });
+
 
     if (!session || session.payment_status !== "paid") {
       console.log("Payment not completed", {

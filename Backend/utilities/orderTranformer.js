@@ -1,9 +1,14 @@
 // order builder
 
-export const transformCheckoutSessionToOrder = (session , userID) => {
+export const transformCheckoutSessionToOrder = (session, userID) => {
   if (!session || session.object !== "checkout.session") {
     throw new Error("Invalid Stripe Checkout Session object");
+
+    
   }
+  console.log("session ====>", session);
+
+  
 
  return {
     /* ---------------- User ---------------- */
@@ -30,9 +35,18 @@ export const transformCheckoutSessionToOrder = (session , userID) => {
     totalAmount: session.amount_total,
 
     /* ---------------- Line Items ---------------- */
-    lineItems: (session.line_items?.data || []).map(item => {
+   lineItems: (session.line_items?.data || []).map((item, index) => {
+     console.log("session line item ====>", item);
+     
       const unitAmount = item.price?.unit_amount ?? 0;
-      const quantity = item.quantity ?? 1;
+     const quantity = item.quantity ?? 1;
+     const image = item?.price.product.images[0];
+     console.log("item image------------->", image);
+     
+     
+     
+     
+     
 
       return {
         name: item.description || "Unknown Product",
@@ -41,7 +55,7 @@ export const transformCheckoutSessionToOrder = (session , userID) => {
         unitAmount,
         lineTotal: unitAmount * quantity,
         currency: item.price?.currency || session.currency,
-        image: item.price?.product?.images?.[0] || null,
+        image: image || null
       };
     }),
 

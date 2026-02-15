@@ -9,6 +9,9 @@ const UserOrdersView = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 2;
 
+
+  console.log("loggedin user name" , loggedInUserData);
+  
   const fetchOrders = async () => {
     try {
       const response = await fetch(
@@ -82,7 +85,7 @@ const UserOrdersView = () => {
     <div className="container my-5">
       {/* ===== HEADER ===== */}
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h4 className="fw-bold mb-0">My Orders</h4>
+        <h4 className="fw-bold mb-0 text-white">{loggedInUserData?.fullName} Orders</h4>
         <form>
           <select className="form-select" {...register("status")}>
             <option value="all">All Orders</option>
@@ -104,9 +107,9 @@ const UserOrdersView = () => {
               <div className="d-flex justify-content-between align-items-start mb-3">
                 <div>
                   <h6 className="fw-semibold mb-1">
-                    Order #{order._id.slice(-6).toUpperCase()}
+                    Order #{order._id.slice(-7).toUpperCase()}
                   </h6>
-                  <small className="text-muted">
+                  <small className="text-white text-opacity-80">
                     Placed on {new Date(order.createdAt).toLocaleDateString()}
                   </small>
                 </div>
@@ -139,7 +142,7 @@ const UserOrdersView = () => {
                     </div>
                     <div>
                       <small className="fw-semibold d-block">{item.name}</small>
-                      <small className="text-muted">Qty: {item.quantity}</small>
+                      <small className="text-white text-opacity-75">Qty: {item.quantity}</small>
                     </div>
                   </div>
                 ))}
@@ -155,7 +158,7 @@ const UserOrdersView = () => {
                 <div>
                   <span className="fw-bold fs-5">
                     {(order?.totalAmount / 280).toFixed(2)}{" "}
-                    {order.currency?.toUpperCase()}
+                    {order.currency?.toUpperCase()}$
                   </span>
                   <div>
                     <small

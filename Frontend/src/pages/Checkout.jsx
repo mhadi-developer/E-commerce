@@ -71,16 +71,20 @@ const handleCheckoutPayment = async () => {
     console.log('purchasung cart list',cartState);
     
 
+    console.log("cart state to config img, ", cartState);
+    
+
  // stripe object compatablity 
     const purchaseItem = cartState.map((item) => {
       return {
         title: item.title,
         unitPrice: item.price,
-        quantity:item.quantity
-      }
+        quantity: item.quantity,
+        image: item.image.secure_url,
+      };
     })
 
-
+    
     console.log('stripe payment list',purchaseItem);
     
 
@@ -93,11 +97,16 @@ const handleCheckoutPayment = async () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ items: purchaseItem }),
+        body: JSON.stringify({
+          items: purchaseItem,
+          id : loggedInUserData._id
+         }),
       },
     );
 
     const session = await res.json();
+ 
+    
 
     
     console.log("session respose***********",session);

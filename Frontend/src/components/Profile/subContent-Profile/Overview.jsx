@@ -6,6 +6,7 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { usePut } from "../../../customHooks/usePut";
 import { ToastContainer, toast } from "react-toastify"
+import { useAuth } from "../../../Custom-context/AuthProvider";
 
 /* ---------------- ZOD SCHEMA ---------------- */
 
@@ -22,15 +23,16 @@ const billingSchema = z.object({
 });
 
 const Overview = () => {
+  const { loggedInUserData} = useAuth()
   /* -------- Simulated Existing User Data -------- */
   const userData = {
-    fullName: "Muhammad Hadi",
-    email: "hadiquershi08@gmail.com",
-    mobile: "923095361664",
+    fullName: loggedInUserData?.fullName || "Hadi Qureshi",
+    email: loggedInUserData?.email || "hadiquershi08@gmail.com",
+    mobile: loggedInUserData?.mobile || "923095361664",
     address1: "Street 123",
-    address2: "",
-    country: "Pakistan",
-    city: "Lahore",
+    address2:  "",
+    country: loggedInUserData?.address.country || "Pakistan",
+    city: loggedInUserData?.address.city,
     province: "Punjab",
     zip: "54000",
   };
@@ -77,7 +79,7 @@ const Overview = () => {
     <div className="row">
       <div className="col-lg-12">
         <form onSubmit={handleSubmit(onSubmit)}  className="bg-secondary">
-          <div className="bg-light p-30 mb-5">
+          <div className=" p-30 mb-5">
             <div className="row">
               {/* Full Name */}
               <div className="col-md-12 form-group">
