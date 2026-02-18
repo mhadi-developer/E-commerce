@@ -2,17 +2,18 @@ import express from "express";
 import "dotenv/config";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-
+import { Server } from "socket.io";
 import productRoutes from "./routes/product.routes.js";
 import categoryRoutes from "./routes/catagory.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import paymentRoutes from "./routes/payment.routes.js";
 import orderRoutes from "./routes/orderOperations.routes.js";
 import cartRoutes from "./routes/cart.routes.js";
-
+import http from "http";
 import { connectDB } from "./config/db.js";
 
-const app = express();
+
+
 
 // ───── CORS SETUP ─────
 const allowedOrigins = [
@@ -22,9 +23,22 @@ const allowedOrigins = [
   "http://localhost:4000",
 
   // ADD THESE AFTER DEPLOY
-  process.env.CLIENT_URL,
-  process.env.ADMIN_URL,
+  // process.env.CLIENT_URL,
+  // process.env.ADMIN_URL,
 ];
+
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: allowedOrigins,
+    credentials: true,
+  },
+});
+
+
+
+
 
 app.use(
   cors({
@@ -56,6 +70,16 @@ app.use( "/api",orderRoutes);
 app.use( "/api",cartRoutes);
 
 // ───── START SERVER AFTER DB CONNECTION ─────
+
+
+io.on("connection", (socket) => {
+
+  io.emit('newUser', { message: "Heello from the backend" });
+   io.emit("server", { message: "Heello from the Hadi Server" });
+  console.log(`A new user is connected with id: ${socket.id}`);
+  
+})
+
 const PORT = process.env.PORT || 5000;
 
 const startServer = async () => {
@@ -63,7 +87,7 @@ const startServer = async () => {
     await connectDB(); // Connect to MongoDB
     console.log("MongoDB connected successfully.");
 
-    app.listen(PORT, () => {
+    server.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });
   } catch (error) {

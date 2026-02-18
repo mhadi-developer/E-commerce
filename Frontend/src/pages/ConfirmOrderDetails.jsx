@@ -33,6 +33,8 @@ const ConfirmedOrderDetails = () => {
     }, [order_id]);
   
 
+  console.log("order", order);
+  
 
 
 
@@ -102,7 +104,7 @@ const ConfirmedOrderDetails = () => {
               <div className="row">
                 <div className="col-6 fw-bold">Total Amount</div>
                 <div className="col-6 text-end fw-bold">
-                  {(order?.totalAmount / 100).toFixed(2) * 280} -PKR
+                  {(order?.totalAmount)} -PKR
                 </div>
               </div>
             </div>
@@ -140,7 +142,7 @@ const ConfirmedOrderDetails = () => {
                     </div>
                   </div>
                   <span className="fw-semibold">
-                    {(item.unitAmount / 100) * 280 * item.quantity}/-PKR
+                    {((item.unitAmount* item.quantity))} PKR
                   </span>
                 </li>
               ))}

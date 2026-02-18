@@ -6,11 +6,24 @@ import AddProductForm from './pages/AddProductForm.jsx';
 import AddCategoryForm from './pages/AddCategoryForm.jsx';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Orders from './pages/Orders.jsx';
+import { io } from 'socket.io-client';
 
 import { useEffect } from 'react';
-
+ const socket = io("http://localhost:7000", {
+   withCredentials: true,
+ });
 
 function App() {
+  useEffect(() => {
+    socket.on('newUser', (data) => {
+      console.log(data.message);
+      
+    });
+    socket.on("server", (data) => {
+      console.log(data.message);
+      
+    })
+   },[socket])
  
   return (
     <div className="container-fluid position-relative d-flex p-0">

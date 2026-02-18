@@ -31,8 +31,8 @@ const Overview = () => {
     mobile: loggedInUserData?.mobile || "923095361664",
     address1: "Street 123",
     address2:  "",
-    country: loggedInUserData?.address.country || "Pakistan",
-    city: loggedInUserData?.address.city,
+    country: loggedInUserData?.address?.country || "Pakistan",
+    city: loggedInUserData?.address?.city || "Rawalpindi",
     province: "Punjab",
     zip: "54000",
   };

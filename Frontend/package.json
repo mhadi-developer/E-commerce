@@ -29,6 +29,7 @@
     "react-select-country-list": "^2.2.3",
     "react-simple-star-rating": "^5.1.7",
     "react-toastify": "^11.0.5",
+    "socket.io-client": "^4.8.3",
     "zod": "^4.1.13"
   },
   "devDependencies": {
