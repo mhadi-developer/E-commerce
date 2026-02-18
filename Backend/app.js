@@ -9,6 +9,7 @@ import userRoutes from "./routes/user.routes.js";
 import paymentRoutes from "./routes/payment.routes.js";
 import orderRoutes from "./routes/orderOperations.routes.js";
 import cartRoutes from "./routes/cart.routes.js";
+import orderNotificationsRoutes from "./routes/orderNotifications.routes.js";
 import http from "http";
 import { connectDB } from "./config/db.js";
 
@@ -67,18 +68,23 @@ app.use( "/api",categoryRoutes);
 app.use( "/api",userRoutes);
 app.use( "/api",paymentRoutes);
 app.use( "/api",orderRoutes);
-app.use( "/api",cartRoutes);
+app.use("/api", cartRoutes);
+app.use("/api", orderNotificationsRoutes);
 
 // ───── START SERVER AFTER DB CONNECTION ─────
 
 
 io.on("connection", (socket) => {
+  console.log("hello socket id =", socket.id);
+  
 
-  io.emit('newUser', { message: "Heello from the backend" });
-   io.emit("server", { message: "Heello from the Hadi Server" });
-  console.log(`A new user is connected with id: ${socket.id}`);
+  // io.emit('newUser', { message: "Heello from the backend" });
+  //  io.emit("server", { message: "Heello from the Hadi Server" });
+  // console.log(`A new user is connected with id: ${socket.id}`);
   
 })
+
+app.set("socketio", io);
 
 const PORT = process.env.PORT || 5000;
 

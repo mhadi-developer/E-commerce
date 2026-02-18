@@ -2,12 +2,13 @@ import React from 'react'
 import { useState , useEffect } from 'react';
 import socket from '../customHooks/useSocket.js';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
 
 const Nav = () => {
   const [notifications, setNotifications] = useState([])
   
   useEffect(() => {
-     socket.on("new-order", (data) => {
+     socket.on("newOrder", (data) => {
       setNotifications(prev => [data, ...prev]);
       console.log("New order via socket:", data);
     });
@@ -138,12 +139,12 @@ const Nav = () => {
                 notifications?.map((notification) => {
                   return (
                     <>
-                      <a href="#" className="dropdown-item">
+                      <Link to={'/orders'} className="dropdown-item">
                         <h6 className="fw-normal mb-0">
                           {notification?.customer?.name} created Order
                         </h6>
                         <small>{moment.utc(notification?.createdAt).fromNow()}</small>
-                      </a>
+                      </Link>
                       <hr className="dropdown-divider" />
                       <a href="#" className="dropdown-item text-center">
                         See all notifications

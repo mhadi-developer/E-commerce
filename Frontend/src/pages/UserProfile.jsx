@@ -1,8 +1,19 @@
-import React, { useState } from "react";
+import React, { useState  , useEffect} from "react";
 import RightContent from "../components/Profile/RightContent.jsx";
+import socket from "../Utilities/useSocket.js"
 
 const UserProfile = () => {
   const [activeTab, setActiveTab] = useState("overview");
+  const [messages, setMessages] = useState([]);
+    
+        useEffect(() => {
+            socket.on("newOrder", (data) => {
+                setMessages(prev => [data, ...prev]);
+                setItems(messages);
+            })
+        });
+    
+      
 
   return (
     <div className="container py-5">
@@ -81,7 +92,22 @@ const UserProfile = () => {
                   }`}
                   onClick={() => setActiveTab("messages")}
                 >
-                  Messages
+                  <span className="d-flex gap-3">
+                    Messages
+                    <span>
+                      {
+                        messages.length > 0 ? ( <div class="notification">
+                        <svg width="24" height="24" viewBox="0 0 24 24">
+                          <path
+                            fill="currentColor"
+                            d="M12 2a7 7 0 00-7 7v4l-2 2v1h18v-1l-2-2V9a7 7 0 00-7-7z"
+                          />
+                        </svg>
+                        <span class="dot"></span>
+                      </div>) : ""
+                      }
+                    </span>
+                  </span>
                 </button>
               </div>
             </div>

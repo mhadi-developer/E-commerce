@@ -3,10 +3,22 @@ import  Overview  from './subContent-Profile/Overview.jsx';
 import { useAuth } from '../../Custom-context/AuthProvider.jsx';
 import { Personalinformation }  from './subContent-Profile/Personalinformation.jsx';
 import UserOrdersView from './subContent-Profile/UserOrdersView.jsx';
+import socket from '../../Utilities/useSocket.js'
+import MessagePanel from './subContent-Profile/MessagePanel.jsx';
+import { useState  , useEffect} from 'react';
 
 const RightContent = ({ activeTab }) => {
     const { loggedInUserData } = useAuth();
-    console.log(   "-----> Profile ",loggedInUserData);
+  console.log("-----> Profile ", loggedInUserData);
+  const [messages, setMessages] = useState([]);
+  
+      useEffect(() => {
+          socket.on("newOrder", (data) => {
+              setMessages(prev => [data, ...prev]);
+              setItems(messages);
+          })
+      });
+  
     
   return (
     <div className="col-lg-9">
@@ -34,7 +46,9 @@ const RightContent = ({ activeTab }) => {
             </div>
           )}
           {activeTab === "payments" && (
-            <h1 className="fw-semibold">Payments</h1>
+            <div>
+              <h1 className="fw-semibold">Payments</h1>
+            </div>
           )}
           {activeTab === "security" && (
             <h1 className="fw-semibold">Security & Login</h1>
@@ -43,7 +57,13 @@ const RightContent = ({ activeTab }) => {
             <h1 className="fw-semibold">Preferences</h1>
           )}
           {activeTab === "messages" && (
-            <h1 className="fw-semibold">Messages</h1>
+            <div>
+              <span className='d-flex gap-2 align-items-center mb-3'>
+                <h1 className="fw-semibold">Messages</h1>
+                <span>0</span>
+              </span>
+              <MessagePanel />
+            </div>
           )}
         </div>
       </div>

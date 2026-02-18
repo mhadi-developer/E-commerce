@@ -48,3 +48,14 @@
      justify-content: center;
      box-shadow: 0 4px 10px rgba(255, 59, 48, 0.6);
  }
+
+.dashboard-status-card:hover{
+    background-color: #ff3b30 !important;
+    color: white !important;
+    transition: .3s ease-in-out;
+}
+
+.dashboard-status-card:hover i{
+    color: white !important;
+    transition: .3s;
+}

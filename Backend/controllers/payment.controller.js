@@ -8,6 +8,7 @@
 import Stripe from "stripe";
 import orderModal from "../Modals/OrderModal/order.modal.js";
 import { transformCheckoutSessionToOrder } from "../utilities/orderTranformer.js";
+import orderNotificationsModal from "../Modals/Notifications/orderNotifications.modal.js";
 
 
 // Initialize Stripe client
@@ -129,6 +130,16 @@ export const confirmOrder = async (req, res, next) => {
   
     console.log("new order --->",orderSavedDB);
     
+    const io = req.app.get("socketio");
+    const orderNotification = {
+      userId,
+      orderId: orderSavedDB._id,
+      text: `Your order with ID ${orderSavedDB._id} has been confirmed`,
+      orderStatus: orderSavedDB.status
+    }
+    io.emit("newOrder", orderSavedDB);
+
+    await orderNotificationsModal.create(orderNotification);
 
 
 

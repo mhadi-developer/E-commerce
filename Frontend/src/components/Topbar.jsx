@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../Custom-context/AuthProvider";
+import socket from "../Utilities/useSocket";
+import { useEffect } from "react";
 
 
 const Topbar = () => {
- 
+  const [notifications, setNotifications] = useState([]);  // messsage/notifications from socket io order confirmations 
   const [searchProduct, setSearchProduct] = useState('');
   const navigate = useNavigate();
 
@@ -14,6 +16,14 @@ const Topbar = () => {
   //LogoutUser  == function
 
 
+  useEffect(() => {
+    socket.on("newOrder", (data) => {
+      setNotifications(prev => [data , ...prev])
+    })
+  })
+
+  console.log("notifications for user........", notifications);
+  
 
 
 
@@ -68,7 +78,22 @@ const Topbar = () => {
                     <ul className="dropdown-menu dropdown-menu-end">
                       <li>
                         <Link to="/profile" className="dropdown-item">
-                          Profile
+                          <span className="d-flex gap-3"> 
+                            Profile
+                            <span>
+                              {
+                                notifications.length > 0 ? (  <div className="notification">
+                                <svg width="24" height="24" viewBox="0 0 24 24">
+                                  <path
+                                    fill="currentColor"
+                                    d="M12 2a7 7 0 00-7 7v4l-2 2v1h18v-1l-2-2V9a7 7 0 00-7-7z"
+                                  />
+                                </svg>
+                                <span className="dot"></span>
+                              </div>) : ""
+                            }
+                            </span>
+                          </span>
                         </Link>
                       </li>
                       <li>
@@ -196,7 +221,10 @@ const Topbar = () => {
                   onChange={(e) => setSearchProduct(e.target.value)}
                 />
                 <div className="input-group-append">
-                  <button type="submit" className="input-group-text bg-transparent text-primary">
+                  <button
+                    type="submit"
+                    className="input-group-text bg-transparent text-primary"
+                  >
                     <i className="fa fa-search"></i>
                   </button>
                 </div>

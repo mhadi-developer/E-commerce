@@ -28,8 +28,8 @@ const DashboardStats = () => {
     <div className="container-fluid pt-4 px-4">
       <div className="row g-4">
         {stats.map((item, index) => (
-          <div key={index} className="col-sm-6 col-xl-3">
-            <div className="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+          <div key={index} className="col-sm-6 col-xl-3 ">
+            <div className="bg-secondary rounded d-flex align-items-center justify-content-between p-4 dashboard-status-card">
               <i className={`fa ${item.icon} fa-3x text-primary`}></i>
               <div className="ms-3">
                 <p className="mb-2">{item.title}</p>
