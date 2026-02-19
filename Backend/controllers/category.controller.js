@@ -61,7 +61,7 @@ export const deleteCategory = async (req, res) => {
 
   await CategoryModal.findByIdAndDelete(id);
 
-  res.json({
+  res.status(200).json({
     message: `category with id ${id} is deleted`,
   });
 };

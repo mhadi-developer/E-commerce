@@ -107,7 +107,6 @@ export const getAllProducts = async (req, res) => {
       .skip(skip)
       .limit(limitNum)
       .sort(sortOperation);
-    console.log('product----->',products);
     
 
     const totalProduct = await productModal.countDocuments(queryObject);
@@ -176,15 +175,24 @@ export const getProductBySlug = async (req, res) => {
    Update product data using product ID
 ========================================================= */
 export const updateProduct = async (req, res) => {
-  const { id } = req.params;
-  const data = req.body;
+  try {
+    const { id } = req.params;
+    const data = req.body;
 
-  await ProductModal.findByIdAndUpdate(id, data);
+    await ProductModal.findByIdAndUpdate(id, data);
 
-  res.json({
-    message: `product with id ${id} is updated`,
-    data: data,
-  });
+    res.status(200).json({
+      message: `product with id ${id} is updated`,
+      data: data,
+    });
+  } catch (error) {
+    console.log(error);
+    
+    res.status(500).json({
+      success: false,
+      message: error.message || "something went wrong",
+    });
+  }
 }; // update product by id in database
 
 /* =========================================================
@@ -192,13 +200,23 @@ export const updateProduct = async (req, res) => {
    Delete product using product ID
 ========================================================= */
 export const deleteProduct = async (req, res) => {
-  const { id } = req.params;
+  try {
+    const { id } = req.params;
 
-  await ProductModal.findByIdAndDelete(id);
+    await ProductModal.findByIdAndDelete(id);
 
-  res.json({
-    message: `product with id ${id} is deleted`,
-  });
+    res.json({
+      message: `product with id ${id} is deleted`,
+    });
+  } catch (error) {
+    console.log(error);
+res.status(500).json({
+  success: false,
+  message: error.message || "something went wrong",
+});
+
+    
+  }
 }; // delete product by id in database
 
 /* =========================================================
@@ -206,48 +224,57 @@ export const deleteProduct = async (req, res) => {
    Create a new product with images, sizes, and colors
 ========================================================= */
 export const createProduct = async (req, res) => {
-  const productData = req.body;
+ try {
+   const productData = req.body;
 
-  // Parse sizes and colors if provided
-  const sizes = req.body.sizes ? JSON.parse(req.body.sizes) : [];
-  const colors = req.body.colors ? JSON.parse(req.body.colors) : [];
+   // Parse sizes and colors if provided
+   const sizes = req.body.sizes ? JSON.parse(req.body.sizes) : [];
+   const colors = req.body.colors ? JSON.parse(req.body.colors) : [];
 
-  productData.sizes = sizes;
-  productData.colors = colors;
+   productData.sizes = sizes;
+   productData.colors = colors;
 
-  // Extract uploaded images
-  const images = req.files;
+   // Extract uploaded images
+   const images = req.files;
 
-  // Main product image
-  const mainImage = {
-    public_id: images.mainImage[0].filename,
-    secure_url: images.mainImage[0].path,
-  };
+   // Main product image
+   const mainImage = {
+     public_id: images.mainImage[0].filename,
+     secure_url: images.mainImage[0].path,
+   };
 
-  // Gallery images
-  const galleryImages = images.galleryImages.map((galleryImg) => {
-    return {
-      public_id: galleryImg.filename,
-      secure_url: galleryImg.path,
-    };
-  });
-  // galleryImg object generated from galleryImages array
+   // Gallery images
+   const galleryImages = images.galleryImages.map((galleryImg) => {
+     return {
+       public_id: galleryImg.filename,
+       secure_url: galleryImg.path,
+     };
+   });
+   // galleryImg object generated from galleryImages array
 
-  console.log("backend received data ****************", productData);
-  console.log("******** images", images);
+   console.log("backend received data ****************", productData);
+   console.log("******** images", images);
 
-  // Attach images to product data
-  productData.mainImage = mainImage;
-  productData.galleryImages = galleryImages;
+   // Attach images to product data
+   productData.mainImage = mainImage;
+   productData.galleryImages = galleryImages;
 
-  // Save product
-  await ProductModal.create(productData);
+   // Save product
+   await ProductModal.create(productData);
 
-  res.status(201).json({
-    message: "product created",
-    data: productData,
-    success: true,
-  });
+   res.status(201).json({
+     message: "product created",
+     data: productData,
+     success: true,
+   });
+ } catch (error) {
+   res.status(500).json({
+     success: false,
+     message: error.message || "something went wrong"
+   })
+   console.log(error);
+   
+ }
 };
 
 /* =========================================================
@@ -262,7 +289,6 @@ export const getProductsByCategory = async (req, res, next) => {
       category: cat_id,
     });
 
-    console.log("products fetched by category -->", productsByCategory);
 
     res.status(200).json({
       data: productsByCategory,

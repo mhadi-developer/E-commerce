@@ -15,7 +15,6 @@ export const getAllOrders = async (req, res) => {
   try {
     const orders = await orderModal.find({});
 
-    console.log("&&&&&&&&&&&---orders from DB------******", orders);
 
     res.status(200).json({
       orders,
@@ -41,10 +40,6 @@ export const getOrderById = async (req, res) => {
 
     const orders = await orderModal.find({user: id});
 
-    console.log(
-      "**************--Order Find By ID (DB)-- ***********",
-      orders,
-    );
 
     res.status(200).json({
       message: "order fetched successfully",
@@ -70,7 +65,6 @@ export const updateOrderById = async (req, res) => {
 
     const updatedOrderById = await orderModal.findByIdAndUpdate(id, data);
 
-    console.log("-----updated order-----", updatedOrderById);
 
     res.status(200).json({
       updatedOrderById,

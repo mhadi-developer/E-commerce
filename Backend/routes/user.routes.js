@@ -15,7 +15,8 @@ const router = express.Router();
 
 router.route("/users/signup").post(signUpUser);
 router.route("/users/signin").post(SignInUser);
-router.route("/users/update").put(isAuthenticated, updateUser); // updating user.....
+router.route("/users/update").put(isAuthenticated, updateUser);// updating user.....
+router.route("/users/update/:id").put(updateUser);
 router.route("/users/loggedIn-user").get(isAuthenticated, getLoggedInUser);
 router.route("/users/change/password").put(userPasswordUpdation);
 

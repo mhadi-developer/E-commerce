@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Breadcrumb from '../components/Detail-page-component/Breadcrum.jsx'
-import { Link } from 'react-router';
+import { Link } from "react-router-dom";
 import { useCart } from '../Custom-context/CartProvider';
 import { useAuth } from '../Custom-context/AuthProvider';
 import { useForm } from "react-hook-form";
@@ -132,13 +132,27 @@ if (session.url) {
       formState: { errors, isSubmitting },
     } = useForm({
       resolver: zodResolver(billingSchema),
-      defaultValues: {
-        fullName: loggedInUserData?.fullName || "",
-        email: loggedInUserData?.email || "",
-        mobile: loggedInUserData?.phone || "",
-      },
     });
 
+  
+  useEffect(()=>{
+    if (loggedInUserData) {
+    reset({
+      fullName: loggedInUserData?.fullName || "",
+      email: loggedInUserData?.email || "",
+      mobile: loggedInUserData?.phone || "",
+      address1: loggedInUserData?.address?.street || "",
+      country: loggedInUserData?.address?.country || "Pakistan",
+      city: loggedInUserData?.address?.city || "Rawalpindi",
+      province: loggedInUserData?.address?.state || "New York",
+      zip: loggedInUserData?.address?.postalCode || "000",
+    }); }
+  },[loggedInUserData, reset])
+  
+  
+  
+  
+  
     const onSubmit = async (data) => {
       console.log("Billing Data:", data);
       try {

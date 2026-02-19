@@ -6,6 +6,7 @@ import UserOrdersView from './subContent-Profile/UserOrdersView.jsx';
 import socket from '../../Utilities/useSocket.js'
 import MessagePanel from './subContent-Profile/MessagePanel.jsx';
 import { useState  , useEffect} from 'react';
+import AddressForm from './subContent-Profile/AddressForm.jsx';
 
 const RightContent = ({ activeTab }) => {
     const { loggedInUserData } = useAuth();
@@ -37,7 +38,10 @@ const RightContent = ({ activeTab }) => {
             </div>
           )}
           {activeTab === "addresses" && (
-            <h1 className="fw-semibold">Addresses</h1>
+            <div>
+              <h1 className="fw-semibold">Addresses</h1>
+              <AddressForm userData={ loggedInUserData} />
+            </div>
           )}
           {activeTab === "orders" && (
             <div>
@@ -58,7 +62,7 @@ const RightContent = ({ activeTab }) => {
           )}
           {activeTab === "messages" && (
             <div>
-              <span className='d-flex gap-2 align-items-center mb-3'>
+              <span className="d-flex gap-2 align-items-center mb-3">
                 <h1 className="fw-semibold">Messages</h1>
                 <span>0</span>
               </span>

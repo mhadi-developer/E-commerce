@@ -105,7 +105,9 @@ const ShopProductSection = ({ products, pages, }) => {
                         className="btn btn-outline-dark btn-square"
                         onClick={() => AddToCart(productData)}
                         disabled={
-                          cartState.find((item) => item.productId == _id)
+                          cartState.find(
+                            (item) => item.productId == product._id,
+                          )
                             ? true
                             : false
                         }

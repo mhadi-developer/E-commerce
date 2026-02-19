@@ -17,7 +17,7 @@ import jwt from "jsonwebtoken";
 export const signUpUser = async (req, res) => {
   const data = req.body;
 
-  console.log("************************ user data", data);
+ 
 
   // Extract plain password
   const password = data.password; // password without hashing
@@ -28,7 +28,6 @@ export const signUpUser = async (req, res) => {
   // Replace plain password with hashed password
   data.password = hashedPassword;
 
-  console.log("***** hashed password", data.password);
 
   // Save user data to database
   const signUpdata = await UserModal.create(data);
@@ -60,7 +59,6 @@ export const SignInUser = async (req, res) => {
         message: "user not found",
       });
     }
-    console.log("********** user found", registerUser);
     // Compare entered password with stored hashed password
     const isMatched = await bcrypt.compare(password, registerUser?.password);
 
@@ -72,7 +70,6 @@ export const SignInUser = async (req, res) => {
       });
     }
 
-    console.log("********** registered user", registerUser);
 
     // Generate JWT token
     const token = jwt.sign(
@@ -109,14 +106,23 @@ export const SignInUser = async (req, res) => {
    Fetch authenticated user without password field
 ========================================================= */
 export const getLoggedInUser = async (req, res) => {
-  // req.user comes from authentication middleware
-  const loggedInUser = await UserModal.findById(req.user.id).select(
-    "-password",
-  );
+  try {
+    // req.user comes from authentication middleware
+    const loggedInUser = await UserModal.findById(req.user.id).select(
+      "-password",
+    );
 
-  res.status(200).json(loggedInUser);
-};
+    res.status(200).json(loggedInUser);
+  }
+  catch (error) {
+    res.status(500).json({
+      message: error.message || "system error"
+    })
+    console.log(error);
+    
 
+  }
+}
 /* =========================================================
    LOGOUT USER
    Clear authentication cookie
@@ -138,33 +144,63 @@ export const LogoutUser = (req, res, next) => {
 ========================================================= */
 export const updateUser = async (req, res) => {
   try {
+ 
+      const { id } = req.params;
+
+    if (id) {
+      
     const data = req.body;
+
+     const updateData = {
+        address: {
+          street: data.street,
+          city: data.city,
+          country: data.country,
+          state: data.state,
+          postalCode: data.postalCode
+        }
+      }
+
+      await UserModal.findByIdAndUpdate(id, updateData);
+
+      res.status(200).json({message: " data updated successfully"})
+      
+
+    }
+
+
+    /* ===============================
+     if Id is not sent in params
+     ===========================*/
     const userId = req.user.id; // from isAuthenticated middleware
 
-    // Prepare updated data compatible with UserModal schema
-    const updatedUserData = {
-      phone: data.mobile,
-      address: {
-        street: data.address1,
-        city: data.city,
-        state: data.province,
-        country: data.country,
-        postalCode: data.zip,
-      },
-    };
+    if (userId) {
+        const data = req.body;
+      // Prepare updated data compatible with UserModal schema
+      const updatedUserData = {
+        phone: data.mobile,
+        address: {
+          street: data.address1,
+          city: data.city,
+          state: data.province,
+          country: data.country,
+          postalCode: data.zip,
+        },
+      };
 
-    await UserModal.findByIdAndUpdate(userId, updatedUserData);
+      await UserModal.findByIdAndUpdate(userId, updatedUserData);
 
-    console.log("*********** user", userId);
-    console.log("********* data to update", data);
 
-    res.status(200).json({
-      message: "user updated successfully",
-      success: true,
-    });
+      res.status(200).json({
+        message: "user updated successfully",
+        success: true,
+      });
+    }
+
+   
   } catch (error) {
     console.log(error);
-    res.state(404).json({ message: error });
+    res.status(404).json({ message: error });
   }
 };
 /*------------------------------------------------------------------------------------------------------*/
@@ -173,26 +209,16 @@ export const userPasswordUpdation = async (req, res) => {
   try {
     const { currentPassword, newPassword, userId } = req.body;
 
-    console.log({
-      currentPassword,
-      newPassword,
-      userId
-    });
-    
-
    
-    
-    console.log("user id ", userId);
-    
 
     const user = await UserModal.findById(userId);
 
-  
+    const saltRounds = process.env.SALT_ROUNDS;
 
     const isMatched = await bcrypt.compare(currentPassword, user.password);
 
     if (isMatched ) {
-      user.password = await bcrypt.hash(newPassword, 10);
+      user.password = await bcrypt.hash(newPassword, saltRounds);
       await user.save();
       return res.status(200).json({
         message: "password updated successfully",

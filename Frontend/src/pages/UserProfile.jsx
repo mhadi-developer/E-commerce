@@ -11,7 +11,10 @@ const UserProfile = () => {
                 setMessages(prev => [data, ...prev]);
                 setItems(messages);
             })
-        });
+        }, [messages]);
+
+  console.log({messages});
+  
     
       
 
@@ -96,7 +99,7 @@ const UserProfile = () => {
                     Messages
                     <span>
                       {
-                        messages.length > 0 ? ( <div class="notification">
+                       messages && messages?.length > 0 ? ( <div class="notification">
                         <svg width="24" height="24" viewBox="0 0 24 24">
                           <path
                             fill="currentColor"

@@ -8,7 +8,6 @@ export const getUserNotificationsByUserId = async (req, res) => {
         if (!id) return res.status(400).json({ message: "User ID is required" });
 
         const notifications = await orderNotificationsModal.find({ userId:id});
-        console.log(" founded notification .....>", notifications);
         
 
         res.status(200).json({
