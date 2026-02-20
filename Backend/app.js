@@ -12,6 +12,9 @@ import cartRoutes from "./routes/cart.routes.js";
 import orderNotificationsRoutes from "./routes/orderNotifications.routes.js";
 import http from "http";
 import { connectDB } from "./config/db.js";
+import { getAIResponse } from "./chatAI.js"
+import {Chat} from "./Modals/Chat/chat.ai.modal.js"
+
 
 
 
@@ -76,11 +79,31 @@ app.use("/api", orderNotificationsRoutes);
 
 io.on("connection", (socket) => {
   console.log("hello socket id =", socket.id);
-  
+   
+  // AI Chat bot integration
 
-  // io.emit('newUser', { message: "Heello from the backend" });
-  //  io.emit("server", { message: "Heello from the Hadi Server" });
-  // console.log(`A new user is connected with id: ${socket.id}`);
+  socket.on("send-message", async (data) => {
+    const { userId, message } = data;
+    
+    if (message) {
+      if (userId) {
+        await Chat.create({ userId, sender: "user", content: message });
+      }
+      const aiReply = await getAIResponse(message);
+      console.log({ aiReply });
+
+      if (userId) {
+        await Chat.create({ userId, sender: "AI", content: aiReply });
+      }
+
+      // Send AI reply back to client
+      socket.emit("ai-response", { message: aiReply });
+    }
+
+  })
+
+ 
+   
   
 })
 

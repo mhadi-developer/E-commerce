@@ -78,20 +78,26 @@ const Topbar = () => {
                     <ul className="dropdown-menu dropdown-menu-end">
                       <li>
                         <Link to="/profile" className="dropdown-item">
-                          <span className="d-flex gap-3"> 
+                          <span className="d-flex gap-3">
                             Profile
                             <span>
-                              {
-                                notifications.length > 0 ? (  <div className="notification">
-                                <svg width="24" height="24" viewBox="0 0 24 24">
-                                  <path
-                                    fill="currentColor"
-                                    d="M12 2a7 7 0 00-7 7v4l-2 2v1h18v-1l-2-2V9a7 7 0 00-7-7z"
-                                  />
-                                </svg>
-                                <span className="dot"></span>
-                              </div>) : ""
-                            }
+                              {notifications.length > 0 ? (
+                                <div className="notification">
+                                  <svg
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      fill="currentColor"
+                                      d="M12 2a7 7 0 00-7 7v4l-2 2v1h18v-1l-2-2V9a7 7 0 00-7-7z"
+                                    />
+                                  </svg>
+                                  <span className="dot"></span>
+                                </div>
+                              ) : (
+                                ""
+                              )}
                             </span>
                           </span>
                         </Link>
@@ -234,7 +240,9 @@ const Topbar = () => {
 
           <div className="col-lg-4 col-6 text-right">
             <p className="m-0 topbar-text">Customer Service</p>
-            <h5 className="m-0 topbar-text">+012 345 6789</h5>
+            <Link to={"/chat/customer/service"}>
+              <i className="bi bi-headset fs-3"></i>
+            </Link>
           </div>
         </div>
       </div>

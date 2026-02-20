@@ -25,6 +25,7 @@ import PaymentCancellation from './pages/PaymentCancel.jsx';
 import ConfirmedOrderDetails from './pages/ConfirmOrderDetails.jsx';
 import UserOrdersView from './components/Profile/subContent-Profile/UserOrdersView.jsx';
 import Shope from './pages/Shope.jsx';
+import ChatBot from './pages/CustomerService.jsx';
 
 
 
@@ -80,6 +81,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Home categories={categories} />} />
             <Route path="/about" element={<About />} />
+            <Route path="/chat/customer/service" element={<ChatBot />} />
+
             <Route
               path="/cart"
               element={
