@@ -1,5 +1,5 @@
+import "dotenv/config"
 import express from "express";
-import "dotenv/config";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { Server } from "socket.io";
@@ -12,12 +12,8 @@ import cartRoutes from "./routes/cart.routes.js";
 import orderNotificationsRoutes from "./routes/orderNotifications.routes.js";
 import http from "http";
 import { connectDB } from "./config/db.js";
-import { getAIResponse } from "./chatAI.js"
-import {Chat} from "./Modals/Chat/chat.ai.modal.js"
-
-
-
-
+import { getAIResponse } from "./chatAI.js";
+import { Chat } from "./Modals/Chat/chat.ai.modal.js";
 
 // ───── CORS SETUP ─────
 const allowedOrigins = [
@@ -30,7 +26,6 @@ const allowedOrigins = [
   // process.env.CLIENT_URL,
   // process.env.ADMIN_URL,
 ];
-
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -39,10 +34,6 @@ const io = new Server(server, {
     credentials: true,
   },
 });
-
-
-
-
 
 app.use(
   cors({
@@ -66,25 +57,24 @@ app.get("/", (req, res) => {
 });
 
 // ───── ROUTES ─────
-app.use( "/api",productRoutes);
-app.use( "/api",categoryRoutes);
-app.use( "/api",userRoutes);
-app.use( "/api",paymentRoutes);
-app.use( "/api",orderRoutes);
+app.use("/api", productRoutes);
+app.use("/api", categoryRoutes);
+app.use("/api", userRoutes);
+app.use("/api", paymentRoutes);
+app.use("/api", orderRoutes);
 app.use("/api", cartRoutes);
 app.use("/api", orderNotificationsRoutes);
 
 // ───── START SERVER AFTER DB CONNECTION ─────
 
-
 io.on("connection", (socket) => {
   console.log("hello socket id =", socket.id);
-   
+
   // AI Chat bot integration
 
   socket.on("send-message", async (data) => {
     const { userId, message } = data;
-    
+
     if (message) {
       if (userId) {
         await Chat.create({ userId, sender: "user", content: message });
@@ -99,13 +89,8 @@ io.on("connection", (socket) => {
       // Send AI reply back to client
       socket.emit("ai-response", { message: aiReply });
     }
-
-  })
-
- 
-   
-  
-})
+  });
+});
 
 app.set("socketio", io);
 

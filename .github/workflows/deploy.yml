@@ -1,0 +1,98 @@
+name: E-COMMERCE APP CI/CD VERCEL + RENDER
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      frontend: ${{ steps.filter.outputs.frontend }}
+      admin: ${{ steps.filter.outputs.admin }}
+      backend: ${{ steps.filter.outputs.backend }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Detect changed folders
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            frontend:
+              - 'Frontend/**'
+            admin:
+              - 'Admin/**'
+            backend:
+              - 'Backend/**'
+
+  deploy-frontend:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.frontend == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Frontend dependencies
+        working-directory: Frontend
+        run: npm install
+
+      - name: Build Frontend
+        working-directory: Frontend
+        run: npm run build
+
+      - name: Deploy Frontend to Vercel
+        run: |
+          vercel --prod \
+            --token $VERCEL_TOKEN \
+            --cwd Frontend \
+            --confirm \
+            --project $VERCEL_FRONTEND_PROJECT_ID
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_FRONTEND_PROJECT_ID: ${{ secrets.VERCEL_FRONTEND_PROJECT_ID }}
+
+  deploy-admin:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.admin == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Admin dependencies
+        working-directory: Admin
+        run: npm install
+
+      - name: Build Admin
+        working-directory: Admin
+        run: npm run build
+
+      - name: Deploy Admin to Vercel
+        run: |
+          vercel --prod \
+            --token $VERCEL_TOKEN \
+            --cwd Admin \
+            --confirm \
+            --project $VERCEL_ADMIN_PROJECT_ID
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ADMIN_PROJECT_ID: ${{ secrets.VERCEL_ADMIN_PROJECT_ID }}
+
+  deploy-backend:
+    name: Deploy Server on Render
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.backend == 'true'
+    steps:
+      - name: Deploy Backend to Render
+        run: |
+          curl -X POST https://api.render.com/deploy/${{ secrets.RENDER_SERVICE_ID }} \
+            -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}"
