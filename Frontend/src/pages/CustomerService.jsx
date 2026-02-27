@@ -9,7 +9,7 @@ export default function ChatBot() {
   
   const { loggedInUserData } = useAuth();
 
-  const userId = loggedInUserData._id;
+  const userId = loggedInUserData?._id;
   console.log({userId});
   
   const [messages, setMessages] = useState([
