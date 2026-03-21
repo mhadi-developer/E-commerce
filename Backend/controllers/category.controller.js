@@ -42,7 +42,7 @@ export const getCategoryById = async (req, res) => {
 ========================================================= */
 export const updateCategory = async (req, res) => {
   const { id } = req.params;
-  const data = req.body;
+  const orderStatus = req.body;
 
   await CategoryModal.findByIdAndUpdate(id, data);
 
@@ -63,6 +63,7 @@ export const deleteCategory = async (req, res) => {
 
   res.status(200).json({
     message: `category with id ${id} is deleted`,
+    success:true
   });
 };
 
@@ -71,38 +72,45 @@ export const deleteCategory = async (req, res) => {
    Create a new category with image upload support
 ========================================================= */
 export const createCategory = async (req, res) => {
-  const { title, isPublic } = req.body;
-  const fileData = req.file;
+  try {
+    const { title, isPublic } = req.body;
+    const fileData = req.file;
 
-  console.log("***** body", req.body);
-  console.log("***** file data", req.file);
+    console.log("***** body", req.body);
+    console.log("***** file data", req.file);
 
-  // Prepare image object
-  const img = {
-    public_id: fileData.filename,
-    secure_url: fileData.path,
-  };
+    if (!fileData) {
+      return res.status(400).json({
+        success: false,
+        message: "Image file is required",
+      });
+    }
 
-  console.log("image data **********", img);
+    const img = {
+      public_id: fileData.filename,
+      secure_url: fileData.path,
+    };
 
-  // Final data object to store
-  const data = {
-    title,
-    image: img,
-    isPublic: isPublic,
-  };
+    const data = {
+      title,
+      image: img,
+      isPublic,
+    };
 
-  await CategoryModal.create(data);
+    await CategoryModal.create(data);
 
-  console.log("Category added");
-  console.log(`Data stored in MongoDB ${JSON.stringify(data)}`);
-
-  return res.status(200).json({
-    success: true,
-    message: "Category created",
-  });
+    return res.status(200).json({
+      success: true,
+      message: "Category created",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
 };
-
 /**
  * ---------------------------------------------------------
  * NOTE:

@@ -9,7 +9,7 @@ const router = express.Router()
 router.route("/orders").get(getAllOrders);
 router.route("/order/:id").get( getOrderById);
 router.route("/order/update/:id").put(updateOrderById);
-router.route("/product/delete/:id").delete(deleteOrderById);
+router.route("/order/delete/:id").delete(deleteOrderById);
 
 
 export default router;

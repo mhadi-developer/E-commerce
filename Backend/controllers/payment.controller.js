@@ -3,7 +3,12 @@
  * ---------------------------------
  * Handles Stripe checkout, order confirmation,
  * and order retrieval.
+ * 
+ *
  */
+
+
+console.log("DEBUG STRIPE KEY:", process.env.STRIPE_SECRET_KEY);
 
 import Stripe from "stripe";
 import orderModal from "../Modals/OrderModal/order.modal.js";

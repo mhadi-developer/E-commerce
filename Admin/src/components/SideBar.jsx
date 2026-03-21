@@ -48,19 +48,19 @@ export const SideBar = () => {
                 </Link>
               </div>
             </div>
-            <Link to={'/orders'} className="nav-item nav-link">
+            <Link to={"/orders"} className="nav-item nav-link">
               <i className="fa fa-th me-2"></i>Orders
             </Link>
 
-            <a href="widget.html" className="nav-item nav-link">
-              <i className="fa fa-th me-2"></i>Widgets
-            </a>
-            <a href="form.html" className="nav-item nav-link">
-              <i className="fa fa-keyboard me-2"></i>Forms
-            </a>
-            <a href="table.html" className="nav-item nav-link">
-              <i className="fa fa-table me-2"></i>Tables
-            </a>
+            <Link to={"/delete-category"} className="nav-item nav-link">
+              <i className="fa fa-th me-2"></i>DeleteCategory
+            </Link>
+            <Link to={"/delete-product"} className="nav-item nav-link">
+              <i className="fa fa-keyboard me-2"></i>DeleteProduct
+            </Link>
+            <Link to={'orders/manage'} className="nav-item nav-link">
+              <i className="fa fa-table me-2"></i>OrderManagment
+            </Link>
             <a href="chart.html" className="nav-item nav-link">
               <i className="fa fa-chart-bar me-2"></i>Charts
             </a>

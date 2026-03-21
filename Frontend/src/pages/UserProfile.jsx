@@ -10,7 +10,11 @@ const UserProfile = () => {
             socket.on("newOrder", (data) => {
                 setMessages(prev => [data, ...prev]);
                 setItems(messages);
-            })
+            }),
+          socket.on('updateOrder', (data) => {
+            console.log('update - order ', data);
+            
+          })
         }, [messages]);
 
   console.log({messages});

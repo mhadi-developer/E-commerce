@@ -7,7 +7,7 @@ import {
   getProductsByCategory,
   getProductBySlug,
 } from "../controllers/product.controller.js";
-import { upload } from '../utilities/multer.js';
+import  upload  from '../utilities/multer.js';
 import { isAuthenticated } from '../Middleware/auth.middleware.js';
 const app = express();
 const router = express.Router()
@@ -25,7 +25,7 @@ router.route("/product/detail/:slug").get(getProductBySlug);
 
 
 router.route("/product/update/:id").put(isAuthenticated, updateProduct);
-router.route("/product/delete/:id").delete(isAuthenticated, deleteProduct);
+router.route("/product/delete/:id").delete(deleteProduct);
 
 
 export default router;

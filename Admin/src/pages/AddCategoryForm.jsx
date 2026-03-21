@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { includes, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -63,7 +63,7 @@ export default function AddCategoryForm() {
       setLoading(true);
       const res = await fetch(`${import.meta.env.VITE_API_URL}/category/add`, {
         method: "POST",
-        body: formData, // do NOT set Content-Type
+        body: formData,// do NOT set Content-Type
       });
 
       if (!res.ok) throw new Error(`Request failed with status ${res.status}`);

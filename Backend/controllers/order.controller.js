@@ -61,10 +61,15 @@ export const getOrderById = async (req, res) => {
 export const updateOrderById = async (req, res) => {
   try {
     const { id } = req.params;
-    const data = req.body;
+    const { orderStatus } = req.body;
 
-    const updatedOrderById = await orderModal.findByIdAndUpdate(id, data);
+    if (!orderStatus) {
+      return res.status(400).json({message:'inavalid status '})
+    }
 
+    const io = req.app.get("socketio");
+    const updatedOrderById = await orderModal.findByIdAndUpdate(id, {orderStatus});
+    io.emit('updateOrder',updateOrderById)
 
     res.status(200).json({
       updatedOrderById,
@@ -84,7 +89,7 @@ export const updateOrderById = async (req, res) => {
 ========================================================= */
 export const deleteOrderById = async (req, res) => {
   try {
-    const { id } = req.params;
+    const {id} = req.params;
 
     const deletedOrder = await orderModal.findByIdAndDelete(id);
 

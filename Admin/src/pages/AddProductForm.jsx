@@ -23,6 +23,7 @@ const productSchema = z.object({
 });
 
 export default function AddProductForm() {
+  
   const mainImageRef = useRef(null);
 
   const [submitLoading, setSubmitLoading] = useState(false);
