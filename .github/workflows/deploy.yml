@@ -1,4 +1,4 @@
-name: "E-Commerce Deployment Automation - GitHub Actions"
+name: "E-Commerce Full Deployment Pipeline"
 
 on:
   push:
@@ -6,33 +6,8 @@ on:
       - main
 
 jobs:
-  detect-changes:
-    name: Detect Changed Services
-    runs-on: ubuntu-latest
-
-    outputs:
-      frontend: ${{ steps.filter.outputs.frontend }}
-      admin: ${{ steps.filter.outputs.admin }}
-      backend: ${{ steps.filter.outputs.backend }}
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - id: filter
-        uses: dorny/paths-filter@v3
-        with:
-          filters: |
-            frontend:
-              - 'Frontend/**'
-            admin:
-              - 'Admin/**'
-            backend:
-              - 'Backend/**'
-
   deploy-frontend:
     name: Deploy Frontend → Netlify
-    needs: detect-changes
-    if: needs.detect-changes.outputs.frontend == 'true'
     runs-on: ubuntu-latest
 
     defaults:
@@ -42,17 +17,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 22
 
-      - run: npm ci
-      - run: npm run build
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Frontend
+        run: npm run build
 
       - name: Deploy Frontend
         uses: nwtgck/actions-netlify@v2.0
         with:
-          publish-dir: ./Frontend/build
+          publish-dir: ./Frontend/dist   # ✅ FIXED (Vite output)
           production-branch: main
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
@@ -60,8 +39,6 @@ jobs:
 
   deploy-admin:
     name: Deploy Admin → Netlify
-    needs: detect-changes
-    if: needs.detect-changes.outputs.admin == 'true'
     runs-on: ubuntu-latest
 
     defaults:
@@ -71,17 +48,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
-      - run: npm ci
-      - run: npm run build
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Admin
+        run: npm run build
 
       - name: Deploy Admin
         uses: nwtgck/actions-netlify@v2.0
         with:
-          publish-dir: ./Admin/build
+          publish-dir: ./Admin/dist   # ✅ FIXED (Vite output)
           production-branch: main
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
@@ -89,8 +70,6 @@ jobs:
 
   deploy-backend:
     name: Deploy Backend → Render
-    needs: detect-changes
-    if: needs.detect-changes.outputs.backend == 'true'
     runs-on: ubuntu-latest
 
     steps:
