@@ -42,7 +42,7 @@ const totalCartAmount = () => {
                     <tr key={item._id}>
                       <td className="align-middle">
                         <img
-                          src={item?.image?.secure_url}
+                          src={item?.mainImage?.secure_url}
                           alt="product"
                           style={{ width: "50px" }}
                           className="me-2"

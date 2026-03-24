@@ -224,59 +224,49 @@ res.status(500).json({
    Create a new product with images, sizes, and colors
 ========================================================= */
 export const createProduct = async (req, res) => {
- try {
-   const productData = req.body;
+  try {
+    const productData = req.body;
 
-   // Parse sizes and colors if provided
-   const sizes = req.body.sizes ? JSON.parse(req.body.sizes) : [];
-   const colors = req.body.colors ? JSON.parse(req.body.colors) : [];
+    // Parse JSON fields
+    productData.sizes = req.body.sizes ? JSON.parse(req.body.sizes) : [];
+    productData.colors = req.body.colors ? JSON.parse(req.body.colors) : [];
 
-   productData.sizes = sizes;
-   productData.colors = colors;
+    const images = req.files;
 
-   // Extract uploaded images
-   const images = req.files;
 
-   // Main product image
-   const mainImage = {
-     public_id: images.mainImage[0].filename,
-     secure_url: images.mainImage[0].path,
-   };
+    // ✅ Main Image (FIXED)
+    const mainImage = {
+      public_id: images.mainImage[0].public_id,
+      secure_url: images.mainImage[0].secure_url,
+    };
 
-   // Gallery images
-   const galleryImages = images.galleryImages.map((galleryImg) => {
-     return {
-       public_id: galleryImg.filename,
-       secure_url: galleryImg.path,
-     };
-   });
-   // galleryImg object generated from galleryImages array
+    // ✅ Gallery Images (FIXED)
+    const galleryImages = images.galleryImages.map((img) => ({
+      public_id: img.public_id,
+      secure_url: img.secure_url,
+    }));
 
-   console.log("backend received data ****************", productData);
-   console.log("******** images", images);
+    console.log("MAIN IMAGE FINAL: ------------>", mainImage);
+    console.log("GALLERY FINAL: -------------------->", galleryImages);
 
-   // Attach images to product data
-   productData.mainImage = mainImage;
-   productData.galleryImages = galleryImages;
+    productData.mainImage = mainImage;
+    productData.galleryImages = galleryImages;
 
-   // Save product
-   await ProductModal.create(productData);
+    const product = await ProductModal.create(productData);
 
-   res.status(201).json({
-     message: "product created",
-     data: productData,
-     success: true,
-   });
- } catch (error) {
-   res.status(500).json({
-     success: false,
-     message: error.message || "something went wrong"
-   })
-   console.log(error);
-   
- }
+    res.status(201).json({
+      message: "product created",
+      data: product,
+      success: true,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "something went wrong",
+    });
+  }
 };
-
 /* =========================================================
    GET PRODUCTS BY CATEGORY
    Fetch products belonging to a specific category

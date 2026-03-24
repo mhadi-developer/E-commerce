@@ -68,11 +68,14 @@ export const updateOrderById = async (req, res) => {
     }
 
     const io = req.app.get("socketio");
-    const updatedOrderById = await orderModal.findByIdAndUpdate(id, {orderStatus});
-    io.emit('updateOrder',updateOrderById)
+    const updatedOrderById = await orderModal.findByIdAndUpdate(id, { orderStatus });
+    io.emit("updateOrder", updatedOrderById);
+    await updatedOrderById.save();
+    
 
     res.status(200).json({
-      updatedOrderById,
+      message: 'order updated successfully',
+      sucess: true
     });
   } catch (error) {
     console.log(error);

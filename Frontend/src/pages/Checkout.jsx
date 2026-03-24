@@ -77,10 +77,10 @@ const handleCheckoutPayment = async () => {
  // stripe object compatablity 
     const purchaseItem = cartState.map((item) => {
       return {
-        title: item.title,
-        unitPrice: item.price,
-        quantity: item.quantity,
-        image: item.image.secure_url,
+        title: item?.title,
+        unitPrice: item?.price,
+        quantity: item?.quantity,
+        image: item?.mainImage?.secure_url,
       };
     })
 

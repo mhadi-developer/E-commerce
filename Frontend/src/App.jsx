@@ -26,6 +26,7 @@ import ConfirmedOrderDetails from './pages/ConfirmOrderDetails.jsx';
 import UserOrdersView from './components/Profile/subContent-Profile/UserOrdersView.jsx';
 import Shope from './pages/Shope.jsx';
 import ChatBot from './pages/CustomerService.jsx';
+import socket from './Utilities/useSocket.js';
 
 
 
@@ -34,6 +35,7 @@ import ChatBot from './pages/CustomerService.jsx';
 export const CartContext = createContext();
 
 function App() {
+  const [data, setData] = useState({});
   // fetching data from custom hook
 
   //   const {
@@ -68,7 +70,22 @@ function App() {
   }, [cart]);
 
 
+ console.log('app.jsx',categories);
  
+  console.log('socket-------------------------------------------------------------------');
+  useEffect(() => {
+  
+    socket.on("updateOrder", (data) => {
+      console.log({ data });
+      setData(data);
+    });
+
+    return () => {
+      socket.off('updateorder');
+      socket.disconnect();
+    }
+  }, []);
+
   
 
   return (

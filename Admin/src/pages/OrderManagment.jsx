@@ -47,6 +47,7 @@ export default function OrderManager() {
 
       if (res.ok) {
         toast.success("Order status updated");
+        fetchOrders();
 
         const modalEl = document.getElementById("statusModal");
         const modalInstance = window.bootstrap.Modal.getInstance(modalEl);

@@ -15,7 +15,7 @@ const Nav = () => {
 
     // Cleanup on unmount
     return () => {
-      socket.off("new-order"); // remove listener
+      socket.off("newOrder"); // remove listener
       socket.disconnect();      // disconnect socket
     };
       

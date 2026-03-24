@@ -76,7 +76,7 @@ export default function CategoryManager() {
             <input
               type="text"
               className="form-control"
-              placeholder="Search products..."
+              placeholder="Search categories..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />

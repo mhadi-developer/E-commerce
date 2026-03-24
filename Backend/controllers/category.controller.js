@@ -85,11 +85,10 @@ export const createCategory = async (req, res) => {
         message: "Image file is required",
       });
     }
-
-    const img = {
-      public_id: fileData.filename,
-      secure_url: fileData.path,
-    };
+const img = {
+  public_id: fileData.public_id,
+  secure_url: fileData.secure_url,
+};
 
     const data = {
       title,
