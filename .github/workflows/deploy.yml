@@ -1,4 +1,4 @@
-name: E-Commerce Deployment Automation | GithubActions
+name: "E-Commerce Deployment Automation - GitHub Actions"
 
 on:
   push:
