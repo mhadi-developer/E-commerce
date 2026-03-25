@@ -22,6 +22,9 @@ const allowedOrigins = [
   "http://localhost:5174",
   "http://localhost:3000",
   "http://localhost:4000",
+  "https://e-commerce-client.vercel.app/",
+  "https://e-commerce-admin-panel-ldm8uue4w-mhadi-developers-projects.vercel.app/",
+  "https://e-commerce-client-1cnzym9p1-mhadi-developers-projects.vercel.app/",
 
   // ADD THESE AFTER DEPLOY
   // process.env.CLIENT_URL,
