@@ -25,6 +25,8 @@ const allowedOrigins = [
   "https://e-commerce-client.vercel.app/",
   "https://e-commerce-admin-panel-ldm8uue4w-mhadi-developers-projects.vercel.app/",
   "https://e-commerce-client-1cnzym9p1-mhadi-developers-projects.vercel.app/",
+  "https://e-commerce-5aht.vercel.app/",
+  "https://e-commerce-kbrn.vercel.app/",
 
   // ADD THESE AFTER DEPLOY
   // process.env.CLIENT_URL,
