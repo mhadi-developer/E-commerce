@@ -6,8 +6,9 @@ on:
       - main
 
 jobs:
+
   deploy-frontend:
-    name: Deploy Frontend → Netlify
+    name: Deploy Frontend → Vercel
     runs-on: ubuntu-latest
 
     defaults:
@@ -17,28 +18,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
+      - name: Install Vercel CLI
+        run: npm install -g vercel
 
-      - name: Install Dependencies
-        run: npm ci
+      - name: Pull Vercel Environment
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Build Frontend
-        run: npm run build
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Deploy Frontend
-        uses: nwtgck/actions-netlify@v2.0
-        with:
-          publish-dir: ./Frontend/dist   # ✅ FIXED (Vite output)
-          production-branch: main
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.FRONTEND_NETLIFY_SITE_ID }}
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+
 
   deploy-admin:
-    name: Deploy Admin → Netlify
+    name: Deploy Admin → Vercel
     runs-on: ubuntu-latest
 
     defaults:
@@ -48,25 +42,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
+      - name: Install Vercel CLI
+        run: npm install -g vercel
 
-      - name: Install Dependencies
-        run: npm ci
+      - name: Pull Vercel Environment
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Build Admin
-        run: npm run build
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Deploy Admin
-        uses: nwtgck/actions-netlify@v2.0
-        with:
-          publish-dir: ./Admin/dist   # ✅ FIXED (Vite output)
-          production-branch: main
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.ADMIN_NETLIFY_SITE_ID }}
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+
 
   deploy-backend:
     name: Deploy Backend → Render
