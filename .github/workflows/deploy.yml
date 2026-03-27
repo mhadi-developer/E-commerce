@@ -40,7 +40,7 @@ jobs:
             --dir=dist \
             --prod \
             --auth=${{ secrets.NETLIFY_AUTH_TOKEN }} \
-            --site=${{ secrets.NETLIFY_FRONTEND_SITE_ID }}
+            --site=${{ secrets.FRONTEND_NETLIFY_SITE_ID }}
 
 
   deploy-admin:
@@ -76,7 +76,7 @@ jobs:
             --dir=dist \
             --prod \
             --auth=${{ secrets.NETLIFY_AUTH_TOKEN }} \
-            --site=${{ secrets.NETLIFY_ADMIN_SITE_ID }}
+            --site=${{ secrets.ADMIN_NETLIFY_SITE_ID }}
 
 
   deploy-backend:
