@@ -64,7 +64,7 @@ function App() {
     }
   });
 
-  console.log(`${import.meta.env.VITE_API_URL}`);
+  console.log(` backend url ${import.meta.env.VITE_API_URL}`);
   
 
   // Save cart to localStorage whenever it changes
