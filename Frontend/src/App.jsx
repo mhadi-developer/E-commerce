@@ -64,6 +64,9 @@ function App() {
     }
   });
 
+  console.log(`${import.meta.env.VITE_API_URL}`);
+  
+
   // Save cart to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
