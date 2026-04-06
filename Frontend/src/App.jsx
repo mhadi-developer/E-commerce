@@ -65,6 +65,9 @@ function App() {
   });
 
   console.log(` backend url ${import.meta.env.VITE_API_URL}`);
+  console.log(`   ENV FILE :${import.meta.env}`);
+
+
   
 
   // Save cart to localStorage whenever it changes
